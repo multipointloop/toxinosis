@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月谜帝大作战 · 启动端</title>
+    <style>
+        /* 氛围 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0b0d17;
+            background-image: radial-gradient(circle at 30% 40%, rgba(0, 255, 255, 0.08) 0%, transparent 30%),
+                              radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.05) 0%, transparent 35%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif; /* 备用字体 */
+            padding: 1rem;
+        }
+
+        /* 主启动卡片 */
+        .launcher {
+            max-width: 720px;
+            width: 100%;
+            background: #0e121f;          
+            border: 2px solid #00f0ff;    
+            box-shadow: 0 0 28px rgba(0, 240, 255, 0.5), inset 0 0 12px rgba(0, 240, 255, 0.3);
+            padding: 2.2rem 2.5rem;
+            border-radius: 4px;            
+            backdrop-filter: blur(1px);
+            transition: none;               
+        }
+
+        /* 标题 */
+        .launcher h1 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-align: center;
+            color: #00f7ff;
+            text-shadow: 0 0 10px #00f0ff, 0 0 20px #00a3ff;
+            margin-bottom: 1.6rem;
+            font-family: 'Orbitron', 'Rajdhani', 'Segoe UI', sans-serif;
+            word-break: keep-all;
+            line-height: 1.2;
+            border-bottom: 1px solid rgba(0, 240, 255, 0.25);
+            padding-bottom: 0.8rem;
+        }
+
+        /* 系统公告区域 */
+        .announcement {
+            color: #cfecff;
+            background: rgba(0, 255, 255, 0.05);
+            border-left: 4px solid #0ff;
+            padding: 1rem 1.4rem;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            letter-spacing: 0.4px;
+            box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.2);
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            font-weight: 400;
+            text-shadow: 0 0 4px rgba(0, 255, 255, 0.5);
+        }
+
+        /* 服务器列表标题 */
+        .launcher h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #b0f0ff;
+            text-shadow: 0 0 6px cyan;
+            margin-bottom: 0.6rem;
+            margin-top: 0.2rem;
+            letter-spacing: 2px;
+            font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+            border-left: 2px solid #0ff;
+            padding-left: 1rem;
+        }
+
+        /* 服务器列表项 */
+        .server-list {
+            list-style: none;
+            margin: 0 0 2.2rem 0;
+            padding: 0.4rem 0 0.4rem 1rem;
+            background: rgba(0, 20, 30, 0.4);
+            border: 1px solid rgba(0, 240, 255, 0.25);
+            border-right: none;
+            border-bottom: none;
+        }
+
+        /* 每个服务器项 */
+        .server-list li {
+            font-size: 1.4rem;
+            margin-bottom: 0.9rem;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+            display: flex;
+            align-items: baseline;
+            font-family: 'Rajdhani', 'Segoe UI', monospace;
+            font-weight: 400;
+            letter-spacing: 0.8px;
+            border-bottom: 1px dashed rgba(0, 255, 255, 0.1);
+            padding-bottom: 0.4rem;
+        }
+
+        .server-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        /* 服务器名 */
+        .server-list li .server-name {
+            color: #e2f2ff;
+            font-weight: 400;
+            margin-right: 0; 
+        }
+
+        /* 统一状态样式 */
+        .status {
+            font-weight: 500;
+            margin-left: 0;  
+        }
+
+        /* 空闲 */
+        .idle {
+            color: #2effb8;
+            text-shadow: 0 0 8px #00ffaa;
+        }
+
+        /* 拥挤 */
+        .crowded {
+            color: #ffb45e;
+            text-shadow: 0 0 8px #ff9900;
+        }
+
+        /* 停机维护中 */
+        .maintenance {
+            color: #ff5f7c;
+            text-shadow: 0 0 8px #ff3366;
+        }
+
+        /* 启动按钮区域 */
+        .start-button {
+            text-align: center;
+            margin-top: 1.8rem;
+            font-size: 2rem;
+            font-weight: 600;
+            font-family: 'Orbitron', 'Rajdhani', monospace;
+            color: #00f7ff;
+            background: transparent;
+            border: 2px solid #0ff;
+            padding: 0.8rem 1.2rem;
+            display: inline-block;
+            width: auto;
+            min-width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), inset 0 0 10px rgba(0, 255, 255, 0.3);
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px cyan, 0 0 25px blue;
+            border-radius: 2px;
+            transition: none;
+            cursor: default;   
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+       
+        .start-button {
+        }
+
+        .launcher p, .launcher h1, .launcher h2, .launcher li, .launcher div {
+            user-select: text; 
+        }
+
+        @media (max-width: 550px) {
+            .launcher {
+                padding: 1.5rem 1.2rem;
+            }
+            .launcher h1 {
+                font-size: 1.9rem;
+                letter-spacing: 2px;
+            }
+            .server-list li {
+                font-size: 1.2rem;
+                flex-wrap: wrap;
+            }
+            .start-button {
+                font-size: 1.6rem;
+                min-width: 220px;
+                white-space: normal;
+                word-break: keep-all;
+                padding: 0.6rem 1rem;
+            }
+            .announcement {
+                font-size: 1rem;
+                padding: 0.8rem 1rem;
+            }
+        }
+
+        .server-list li .status:before, 
+        .server-list li .status:after {
+            content: none;
+        }
+        .server-list li {
+            font-family: 'Rajdhani', 'Courier New', monospace;
+        }
+
+        .launcher {
+            position: relative;
+        }
+        .launcher::before,
+        .launcher::after {
+            display: none; 
+        }
+    </style>
+    <!-- 引入科技感字体（可选，但不影响内容完整性，仅风格近似原图）（不知道怎么用qwq） -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="launcher">
+        <h1>《月谜帝大作战》启动端</h1>
+
+        <p class="announcement">系统公告：S4 赛季“月谜帝大作战”已正式上线，请玩家选择服务器进入游戏，祝您一胎十个！</p>
+
+        <h2>服务器列表：</h2>
+
+        <ul class="server-list">
+            <li>
+                <span class="server-name">南通一区</span><span class="status idle">（空闲）</span>
+            </li>
+            <li>
+                <span class="server-name">成都二区</span><span class="status crowded">（拥挤）</span>
+            </li>
+            <li>
+                <span class="server-name">测试专区</span><span class="status maintenance">（停机维护中）</span>
+            </li>
+        </ul>
+
+        <!-- 启动 -->
+        <div class="start-button">> 立即开月 <<</div>
+    </div>
+</body>
+</html>
